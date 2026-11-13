@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloud Infrastructure Interview Prep</title>
+<style>
+:root{--bg:#eef4fb;--card:#fff;--ink:#1c2b3a;--mute:#5b6e80;--line:#d6e2ef;--blue:#2f6fdb;--teal:#14a89a;--green:#5cc98a;--warn:#f5a623;--warnbg:#fff1d0;--track:#e1eaf4;--violet:#7a5af8;--coral:#f2674f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b1e;--card:#1d272b;--ink:#e6eeee;--mute:#9bb0b6;--line:#2c3a3f;--warnbg:#3a3220;--track:#2c3a3f}}
+:root[data-theme="dark"]{--bg:#141b1e;--card:#1d272b;--ink:#e6eeee;--mute:#9bb0b6;--line:#2c3a3f;--warnbg:#3a3220;--track:#2c3a3f}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:"Iowan Old Style",Georgia,serif;margin:0;font-weight:600}
+h2{font-size:1.25rem;margin-bottom:12px}
+button{font:inherit;cursor:pointer;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+button.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{margin-top:12px;padding:22px 20px 14px;border-radius:16px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet))}
+header p{margin:4px 0;color:#e8efff}
+header details.set summary{color:#fff}
+h2{color:var(--blue)}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto}
+nav button{border:0;background:none;border-radius:0;min-height:48px;color:var(--mute);white-space:nowrap}
+nav button:hover{color:var(--ink)}
+section{margin:28px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.stats .card{border-top:5px solid var(--blue)}.stats .card:nth-child(2){border-top-color:var(--teal)}.stats .card:nth-child(3){border-top-color:var(--violet)}.stats .card:nth-child(4){border-top-color:var(--warn)}.stats .card:nth-child(5){border-top-color:var(--coral)}
+#today{border-left:6px solid var(--teal)}
+.week:nth-child(1) .bar i{background:var(--blue)}.week:nth-child(2) .bar i{background:var(--violet)}.week:nth-child(3) .bar i{background:var(--coral)}
+details.day{border-left:6px solid var(--blue)}details.day[data-w="1"]{border-left-color:var(--violet)}details.day[data-w="2"]{border-left-color:var(--coral)}
+details.day[data-w="1"] .dn{color:var(--violet)}details.day[data-w="2"] .dn{color:var(--coral)}
+.stat b{display:block;font-size:1.7rem;font-family:Georgia,serif}
+.stat span{color:var(--mute);font-size:.9rem}
+.two{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.bar{height:10px;background:var(--track);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:6px;transition:width .3s}
+.bar.big{height:18px}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.mute{color:var(--mute)}
+.tag{font-size:.8rem;padding:2px 10px;border-radius:20px;background:var(--track)}
+.tag.p{background:var(--warnbg)}.tag.c{background:var(--green);color:#10321b}
+.ring{width:84px;height:84px;flex:none}
+.ring text{font:600 18px Georgia,serif;fill:var(--ink)}
+.week{margin-bottom:14px}
+details.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+details.day summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;min-height:44px}
+details.day summary::-webkit-details-marker{display:none}
+.dn{font-weight:700;color:var(--blue)}
+.dt{font-weight:600}
+.dm{grid-column:2;color:var(--mute);font-size:.85rem}
+.dp{grid-column:1/-1;display:flex;gap:10px;align-items:center}.dp .bar{flex:1}
+.body{padding:0 16px 16px;border-top:1px solid var(--line)}
+.body h4{margin:16px 0 4px;font-size:.95rem;color:var(--blue)}
+.t{display:flex;gap:12px;align-items:flex-start;padding:8px 0;min-height:44px;cursor:pointer}
+.t input{width:22px;height:22px;margin-top:1px;flex:none;accent-color:var(--teal)}
+.t input:checked+span{color:var(--mute);text-decoration:line-through}
+.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.cal button{padding:6px 2px;line-height:1.2;font-size:.8rem;border-width:2px}
+.cal b{display:block;font-size:1rem}
+.cal .s0{background:var(--card)}.cal .s1{background:var(--warnbg);border-color:var(--warn)}.cal .s2{background:var(--green);color:#10321b;border-color:var(--green)}.cal .now{outline:2px solid var(--blue)}
+ul.l{list-style:none;margin:0;padding:0}
+ul.l li{padding:4px 0}
+ul.l button{border:0;background:none;padding:6px 0;text-align:left;min-height:36px;width:100%}
+ul.l button:hover{color:var(--blue)}
+.warn{background:var(--warnbg);border-radius:8px;padding:6px 10px;margin-bottom:6px}
+label.f{display:block;margin:10px 0 4px;font-weight:600;font-size:.9rem}
+textarea,input[type=number],input[type=date],select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+details.set{margin-top:10px}details.set summary{cursor:pointer;color:var(--mute);min-height:36px}
+.danger{border-color:#c0614f;color:#c0614f}
+#empty{display:none;text-align:center;padding:30px 10px}
+canvas{max-width:100%}
+@media (max-width:600px){body{overflow-x:hidden}.wrap{padding:0 12px}h1{font-size:1.45rem}section{margin:22px 0}.card{padding:14px}.row>button{width:100%}.cal{grid-template-columns:repeat(4,1fr)}details.day summary{padding:12px}.body{padding:0 12px 14px}.stats{gap:10px}.stat b{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="top"></div>
+<div class="wrap">
+<header>
+<h1>Cloud Infrastructure Interview Prep</h1>
+<p>17-Day Preparation Journey</p>
+<p id="period"></p>
+
+</header>
+</div>
+<nav><div class="wrap"><button data-go="#top">Dashboard</button><button data-go="#plan">17-Day Plan</button><button data-go="#progress">Progress</button><button data-go="#logs">Study Logs</button><button id="navToday">Today</button></div></nav>
+<main class="wrap">
+<section><div class="grid stats" id="stats"></div></section>
+<section class="card" id="today"></section>
+<section class="card"><h2>Your Preparation Progress</h2><div class="bar big"><i id="ob"></i></div><div class="row" style="margin-top:10px"><b id="op"></b><span class="mute" id="od"></span></div><p class="mute" id="mot" style="margin-bottom:0"></p></section>
+<section><h2>Weekly Progress</h2><div class="card" id="weeks"></div></section>
+<section id="plan"><h2>17-Day Roadmap</h2><div id="cards"></div></section>
+<section id="progress"><h2>Progress Over 17 Days</h2><div class="card"><canvas id="ch" height="110"></canvas><div id="empty" class="mute">No completed tasks yet. Check a task in the roadmap and your progress line will appear here.</div></div></section>
+<section><h2>Calendar</h2><div class="card"><div class="cal" id="cal"></div><p class="mute" style="margin-bottom:0;font-size:.85rem">White: not started. Yellow: in progress. Green: completed.</p></div></section>
+<section class="grid two">
+<div class="card"><h2>What Remains</h2><div id="rem"></div></div>
+<div class="grid" style="align-content:start">
+<div class="card"><h2>Completed</h2><div id="don"></div></div>
+<div class="card"><h2>Needs Attention</h2><div id="att"></div></div>
+</div></section>
+<section id="logs"><h2>Study Logs</h2><div class="grid two"><div class="card"><label class="f" for="ld" style="margin-top:0">Day</label><select id="ld"></select><div id="lf"></div></div><div class="card"><h3 style="margin-bottom:8px">Days with notes</h3><div id="ll"></div></div></div></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ===== Curriculum data: [title, [[part label, "items;..."]], "practical;..."] ===== */
+const WEEKS=[["Week 1","IT Infrastructure, Linux & Networking Fundamentals",0,5],["Week 2","Cloud Computing & Microsoft Azure",6,11],["Week 3","Enterprise Infrastructure, Troubleshooting & Final Interview",12,16]];
+const CUR=[
+["IT Infrastructure Fundamentals + Linux Fundamentals",[["Part A: IT Infrastructure","IT infrastructure basics;Server vs workstation;Physical vs virtual servers;On-premises vs cloud;Data center basics;CPU, RAM, storage and NIC;RAID basics;HDD vs SSD;Server boot process"],["Part B: Linux Fundamentals","Linux architecture;Kernel;Shell;Terminal;Linux filesystem;Root user;Basic Linux commands;File and directory management"]],"Install/use Ubuntu VM and practice basic Linux commands."],
+["Linux Users, Groups, Permissions & Processes",[["Part A: Users and Permissions","Users;Groups;Ownership;rwx permissions;chmod;chown;chgrp;sudo;User management"],["Part B: Processes and Services","Processes;PID;Background/foreground processes;Services;systemd;systemctl;Process monitoring;Service troubleshooting"]],"Create users, assign permissions, manage services and terminate processes."],
+["Linux Storage, Logs & Troubleshooting",[["Part A: Linux Storage","Filesystems;Partitions;Mounting;Disk management;LVM basics;Swap;Inodes;df;du;lsblk"],["Part B: Linux Logs and Troubleshooting","System logs;Application logs;journalctl;/var/log;grep;find;tail;Troubleshooting methodology"],["Part C: Interview Preparation","Linux revision;Linux interview questions;Linux troubleshooting scenarios;Mini mock interview"]],"Identify disk space issues, inspect system logs and troubleshoot a stopped service."],
+["Networking Fundamentals, OSI & TCP/IP",[["Part A: Networking Fundamentals","LAN/WAN;Client/server;IP address;MAC address;NIC;Private/public IP"],["Part B: OSI & TCP/IP","OSI 7 layers;TCP/IP model;TCP;UDP;ICMP;Ethernet;Real-world packet flow"]],"Understand how a request travels from your computer to a web server."],
+["IP Addressing, Subnetting, DNS & DHCP",[["Part A: IP Addressing","IPv4;IPv6 basics;Network ID;Host ID;Subnet mask;CIDR;Default gateway;Private IP ranges;Subnetting practice"],["Part B: DNS & DHCP","DNS;DNS resolver;A;AAAA;CNAME;MX;NS;PTR;DHCP;DORA process;DNS troubleshooting"]],"Perform subnetting exercises and troubleshoot DNS resolution."],
+["Routing, NAT, Ports, Firewalls & Networking Mock",[["Part A: Routing and NAT","Routing;Routing table;Default route;Static routing;Dynamic routing concepts;NAT;PAT;Internet gateway"],["Part B: Ports and Firewalls","Common ports;HTTP;HTTPS;SSH;RDP;DNS;MySQL;Firewall;Inbound/outbound rules"],["Part C: Network Troubleshooting","ping;traceroute;curl;ss/netstat;telnet/nc"],["Part D: Interview Preparation","Networking revision;Rapid-fire questions;Network troubleshooting scenarios;Mock interview"]],""],
+["Cloud Computing Fundamentals + Azure Architecture",[["Part A: Cloud Computing Fundamentals","Cloud computing;IaaS;PaaS;SaaS;Public cloud;Private cloud;Hybrid cloud;Scalability;Elasticity;Pay-as-you-go"],["Part B: Azure Core Architecture","Azure regions;Availability zones;Subscriptions;Resource groups;Resources;Azure Portal;Azure CLI;Azure hierarchy"]],"Explore Azure Portal and understand subscriptions, resource groups and regions."],
+["Azure Virtual Machines",[["","VM;VM images;VM sizes;OS disk;Data disk;NIC;Public/private IP;SSH;RDP;NSG;VM troubleshooting"]],"Create an Azure VM.;Understand VM configuration.;Connect using SSH/RDP.;Explore VM disks and networking.;Troubleshoot an unreachable VM."],
+["Azure Networking",[["","VNet;Subnet;NSG;Route tables;Public IP;Private IP;NAT Gateway;VNet Peering;VPN Gateway"]],"Create a VNet.;Create subnets.;Configure NSG rules.;Understand VNet peering.;Test network connectivity."],
+["Azure Storage",[["","Storage Accounts;Blob Storage;File Storage;Queue Storage;Table Storage;Managed Disks;Storage redundancy;Hot/Cool/Archive tiers"]],"Create a Storage Account.;Upload files to Blob Storage.;Explore Azure Files.;Understand redundancy options.;Explore access tiers."],
+["Azure Identity, Access & Security",[["Part A: Azure Identity and Access","Microsoft Entra ID;Authentication;Authorization;RBAC;Roles;Users;Groups;Service principals;Managed identities;Least privilege"],["Part B: Security Fundamentals","CIA Triad;Authentication;Authorization;MFA;RBAC;Least privilege;Firewalls;Encryption;Patch management;Antivirus/EDR;SSH security"]],"Create users, assign RBAC roles and understand access permissions."],
+["Azure Monitoring + Windows Server",[["Part A: Azure Monitoring","Azure Monitor;Metrics;Logs;Alerts;Log Analytics;Activity Log;VM monitoring;Monitoring scenarios"],["Part B: Windows Server","Windows Server fundamentals;Services;Event Viewer;Task Manager;PowerShell;RDP;Windows Firewall;Windows troubleshooting"]],"Explore Azure Monitor.;Review VM metrics and activity logs.;Use Event Viewer.;Manage Windows services using PowerShell."],
+["Active Directory + Virtualization",[["Part A: Active Directory","Active Directory;Domain;Domain Controller;Users;Groups;Organizational Units;Group Policy;DNS and AD relationship"],["Part B: Virtualization","Hypervisors;Type 1 vs Type 2;Virtual machines;vCPU;vRAM;Virtual disks;Snapshots;NAT networking;Bridged networking;Host-only networking"]],"Explore Windows Server.;Understand domain environments.;Practice VirtualBox networking modes.;Understand snapshots and virtual disks."],
+["Backup, Disaster Recovery & High Availability",[["","Backup;Restore;Full backup;Incremental backup;Differential backup;Snapshot;RPO;RTO;Disaster Recovery;High Availability;Business Continuity"]],"Understand backup policies and schedules.;Explore restore points.;Understand restoration from snapshots.;Study different restore options.;Design a basic disaster recovery scenario."],
+["Infrastructure Troubleshooting + Technical Rapid Fire",[["Part A: Real-world troubleshooting scenarios","High CPU;High RAM;Full disk;Network failure;DNS failure;Application unavailable;VM unreachable;Service stopped;Authentication failure"],["Troubleshooting methodology","1. Identify — Understand the issue.;2. Gather Information — Collect logs and system information.;3. Isolate — Identify the source of the problem.;4. Test — Perform diagnostic tests.;5. Fix — Apply the appropriate solution.;6. Verify — Confirm that the issue is resolved.;7. Prevent — Implement preventive measures."],["Part B: Technical Rapid Fire","Linux;Networking;Cloud;Azure;Windows;Security;Virtualization;Troubleshooting"]],""],
+["Full Technical Mock Interview",[["Interview coverage","Introduction;Linux;Networking;Cloud;Azure;Windows;Troubleshooting;Follow-up questions"],["Target","Explain concepts clearly;Answer without memorizing definitions;Solve scenario-based questions;Explain practical experience;Handle follow-up questions confidently"]],""],
+["Final Interview Simulation",[["Part A: Technical Interview","Linux;Networking;Cloud computing;Azure services;Windows Server;Active Directory;Virtualization;Security;Backup and Disaster Recovery"],["Part B: Scenario-Based Questions","VM not responding.;Server CPU utilization is 95%.;Users cannot access an application.;DNS is not resolving.;Storage is full.;A service has unexpectedly stopped.;Users cannot authenticate.;Backup restoration has failed."],["Part C: HR Interview","Self-introduction;Strengths/weaknesses;Why Cloud Infrastructure?;Fresher-related questions;Career questions"],["Part D: Final Assessment","Technical interview;Scenario-based questions;Troubleshooting;HR questions;Communication skills;Confidence and presentation"]],""]
+];
+const DAYS=CUR.map(([title,parts,prac],i)=>{const groups=[],tasks=[];let n=0;
+ const add=(label,items,kind)=>{const g={label,tasks:[]};items.split(";").forEach(text=>{const t={id:`d${i+1}-${n++}`,text,kind,day:i};g.tasks.push(t);tasks.push(t)});groups.push(g)};
+ parts.forEach(([l,s])=>add(l,s,"topic"));if(prac)add("Practical",prac,"practical");
+ return{n:i+1,title,groups,tasks,week:WEEKS.findIndex(w=>i>=w[2]&&i<=w[3])}});
+const ALL=DAYS.flatMap(d=>d.tasks);
+
+/* ===== localStorage ===== */
+const KEY="cloud-prep-tracker-v1";
+const store={load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}},save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const parse=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+let S=Object.assign({start:"2026-11-14",done:{},logs:{}},store.load()||{});S.start="2026-11-14";
+const save=()=>store.save(S);
+
+/* ===== Progress calculations ===== */
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const stat=list=>{const done=list.filter(t=>S.done[t.id]).length;return{done,total:list.length,pct:pct(done,list.length)}};
+const status=p=>p===0?"Not Started":p===100?"Completed":"In Progress";
+const cls=p=>p===0?"":p===100?"c":"p";
+const dayStat=i=>stat(DAYS[i].tasks);
+const dayDate=i=>addDays(parse(S.start),i);
+const fmt=(d,o)=>d.toLocaleDateString(undefined,o||{day:"numeric",month:"short",year:"numeric"});
+const todayIdx=()=>{const t=new Date();return Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-parse(S.start))/864e5)};
+const streak=()=>{const days=new Set(Object.values(S.done));let d=new Date();if(!days.has(iso(d)))d=addDays(d,-1);let n=0;while(days.has(iso(d))){n++;d=addDays(d,-1)}return n};
+const short=t=>t.length>34?t.slice(0,32)+"…":t;
+
+/* ===== UI rendering ===== */
+const $=s=>document.querySelector(s);
+const bar=p=>`<div class="bar"><i style="width:${p}%"></i></div>`;
+const ring=p=>`<svg class="ring" viewBox="0 0 84 84" role="img" aria-label="${p}% overall"><circle cx="42" cy="42" r="34" fill="none" stroke="var(--track)" stroke-width="9"/><circle cx="42" cy="42" r="34" fill="none" stroke="var(--teal)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${2*Math.PI*34}" stroke-dashoffset="${2*Math.PI*34*(1-p/100)}" transform="rotate(-90 42 42)"/><text x="42" y="48" text-anchor="middle">${p}%</text></svg>`;
+function openDay(i){const el=$("#day-"+i);el.open=true;el.scrollIntoView({block:"start"})}
+const focusIdx=()=>{const t=todayIdx();if(t<0)return 0;if(t>16){const f=DAYS.findIndex((d,i)=>dayStat(i).pct<100);return f<0?16:f}return t};
+
+function renderCards(){
+ $("#cards").innerHTML=DAYS.map((d,i)=>`<details class="day" id="day-${i}" data-w="${d.week}"><summary><span class="dn">Day ${String(d.n).padStart(2,"0")}</span><span class="dt">${d.title}</span><span class="tag" data-st></span><span class="dm" data-dm></span><span></span><span class="dp"><span data-pp></span>${bar(0)}</span></summary><div class="body">${d.groups.map(g=>`${g.label?`<h4>${g.label}</h4>`:""}${g.tasks.map(t=>`<label class="t"><input type="checkbox" data-id="${t.id}"><span>${t.text}</span></label>`).join("")}`).join("")}<button data-log="${i}" style="margin-top:12px">Add study notes for this day</button></div></details>`).join("");
+}
+function updateCards(){
+ DAYS.forEach((d,i)=>{const s=dayStat(i),el=$("#day-"+i);
+  el.querySelectorAll("input[data-id]").forEach(c=>c.checked=!!S.done[c.dataset.id]);
+  const st=el.querySelector("[data-st]");st.textContent=status(s.pct);st.className="tag "+cls(s.pct);
+  el.querySelector("[data-dm]").textContent=`Week ${d.week+1} · ${fmt(dayDate(i),{weekday:"short",day:"numeric",month:"short"})} · ${s.done}/${s.total} tasks`;
+  el.querySelector("[data-pp]").textContent=s.pct+"%";el.querySelector(".bar i").style.width=s.pct+"%"})
+}
+let chart;
+function renderChart(){
+ const data=DAYS.map((d,i)=>dayStat(i).pct),any=ALL.some(t=>S.done[t.id]);
+ $("#empty").style.display=any?"none":"block";$("#ch").style.display=any?"block":"none";
+ if(!any||typeof Chart==="undefined")return;
+ if(chart){chart.data.datasets[0].data=data;chart.update();return}
+ chart=new Chart($("#ch"),{type:"line",data:{labels:DAYS.map(d=>"Day "+d.n),datasets:[{label:"Completion %",data,borderColor:"#1f9a8c",backgroundColor:"rgba(31,154,140,.15)",fill:true,tension:.25,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100,title:{display:true,text:"Completion %"}},x:{title:{display:true,text:"Study day"}}}}});
+}
+function render(){
+ const o=stat(ALL),topics=stat(ALL.filter(t=>t.kind==="topic")),t=todayIdx();
+ const daysDone=DAYS.filter((d,i)=>dayStat(i).pct===100).length,left=t<0?17:Math.max(0,Math.min(17,17-t));
+ $("#period").textContent=`${fmt(parse(S.start))} to ${fmt(dayDate(16))} · 17 days`;
+
+ $("#stats").innerHTML=`<div class="card stat row"><div><span>Overall Progress</span></div>${ring(o.pct)}</div><div class="card stat"><b>${daysDone} / 17</b><span>Days Completed</span></div><div class="card stat"><b>${topics.done} / ${topics.total}</b><span>Topics Completed</span></div><div class="card stat"><b>${streak()} ${streak()===1?"Day":"Days"}</b><span>Current Streak</span></div><div class="card stat"><b>${left}</b><span>Days Remaining${t>=0&&t<=16?" (incl. today)":""}</span></div>`;
+ const f=focusIdx(),fs=dayStat(f);let head;
+ if(t<0)head=`Your preparation starts on ${fmt(parse(S.start))}, in ${-t} day${t===-1?"":"s"}. Day 1 is ready when you are.`;
+ else if(t>16)head=`The 17-day period ended on ${fmt(dayDate(16))}. Finish any remaining tasks below.`;
+ else head=`Today is ${fmt(new Date(),{weekday:"long",day:"numeric",month:"long"})}`;
+ $("#today").innerHTML=`<h2>Today’s Focus</h2><p class="mute" style="margin-top:0">${head}</p><div class="row"><div><b>Day ${DAYS[f].n} — ${DAYS[f].title}</b><div class="mute">${fs.done} of ${fs.total} tasks done · ${fs.pct}% · <span class="tag ${cls(fs.pct)}">${status(fs.pct)}</span></div></div><button class="pri" data-open="${f}">Continue Today’s Study</button></div>`;
+ $("#ob").style.width=o.pct+"%";$("#op").textContent=o.pct+"%";
+ $("#od").textContent=`${o.done} tasks completed · ${o.total-o.done} remaining · ${daysDone} of 17 days completed`;
+ $("#mot").textContent=o.pct===100?"Everything is complete. You’ve built real interview confidence.":daysDone>0?`${daysDone} day${daysDone>1?"s":""} completed. Keep going. Your consistency is building your interview confidence.`:t>=0&&t<=16?`Today’s target: complete Day ${t+1}.`:"You’re making steady progress with every task you check.";
+ $("#weeks").innerHTML=WEEKS.map((w,wi)=>{const s=stat(DAYS.filter(d=>d.week===wi).flatMap(d=>d.tasks)),n=w[3]-w[2]+1,exp=t>w[3]?100:t<w[2]?0:pct(t-w[2],n),behind=s.pct<exp-10&&t>=w[2];
+  return`<div class="week"><div class="row"><span><b>${w[0]}</b> — ${n} Days · <span class="mute">${w[1]}</span></span><span>${s.pct}%${behind?` <span class="tag p">Behind schedule</span>`:""}</span></div>${bar(s.pct)}</div>`}).join("");
+ updateCards();renderChart();
+ $("#cal").innerHTML=DAYS.map((d,i)=>{const p=dayStat(i).pct;return`<button class="s${p===100?2:p?1:0}${i===t?" now":""}" data-open="${i}" aria-label="Day ${d.n}, ${status(p)}"><b>${d.n}</b>${fmt(dayDate(i),{day:"numeric",month:"short"})}</button>`}).join("");
+ const cur=Math.max(0,Math.min(16,t)),up=DAYS.filter((d,i)=>i>cur&&dayStat(i).pct<100).slice(0,3);
+ $("#rem").innerHTML=`<p class="mute" style="margin-top:0">${left} study day${left===1?"":"s"} left · ${topics.total-topics.done} topics and ${o.total-o.done} tasks incomplete</p><b>Upcoming</b><ul class="l">${up.length?up.map((d,k)=>`<li><button data-open="${d.n-1}">${d.n-1===t+1?"Tomorrow":fmt(dayDate(d.n-1),{weekday:"short",day:"numeric",month:"short"})}: Day ${d.n} — ${d.title}</button></li>`).join(""):"<li class=mute>No upcoming incomplete days.</li>"}</ul>`;
+ const dn=DAYS.filter((d,i)=>dayStat(i).pct===100);
+ $("#don").innerHTML=dn.length?`<ul class="l">${dn.map(d=>`<li><button data-open="${d.n-1}">✓ Day ${d.n} — ${d.title}</button></li>`).join("")}</ul><p class="mute" style="margin-bottom:0">${topics.done} topics completed</p>`:`<p class="mute" style="margin:0">Completed days will appear here.</p>`;
+ const at=DAYS.map((d,i)=>({d,p:dayStat(i).pct,i})).filter(x=>x.p<100&&(x.i<=cur+1||x.p>0)&&(t>=0||x.p>0)).sort((a,b)=>a.p-b.p||a.i-b.i).slice(0,5);
+ $("#att").innerHTML=at.length?at.map(x=>`<div class="warn"><button style="min-height:32px;border:0;background:none;padding:0;text-align:left" data-open="${x.i}">⚠ ${short(x.d.title)} — ${x.p}%</button></div>`).join(""):`<p class="mute" style="margin:0">Nothing needs attention right now.</p>`;
+ renderLogList();
+}
+
+/* ===== Study logs ===== */
+const FIELDS=[["studied","What I studied today"],["practised","What I practised"],["understood","What I understood"],["difficult","What I found difficult"],["revise","Questions to revise"]];
+function renderLogForm(i){
+ const l=S.logs[i]||{};$("#ld").value=i;
+ $("#lf").innerHTML=FIELDS.map(([k,lab])=>`<label class="f" for="f-${k}">${lab}</label><textarea id="f-${k}" data-k="${k}">${(l[k]||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")}</textarea>`).join("")+`<label class="f" for="f-hours">Time spent studying (hours)</label><input type="number" id="f-hours" data-k="hours" min="0" max="24" step="0.25" value="${l.hours||""}"><p class="mute" style="font-size:.85rem">Notes save automatically.</p>`;
+}
+function renderLogList(){
+ const rows=Object.keys(S.logs).filter(i=>Object.values(S.logs[i]).some(v=>v)).sort((a,b)=>a-b),hrs=rows.reduce((s,i)=>s+(+S.logs[i].hours||0),0);
+ $("#ll").innerHTML=rows.length?`<p class="mute" style="margin-top:0">${hrs} hours logged in total</p><ul class="l">${rows.map(i=>`<li><button data-log="${i}">Day ${+i+1} — ${short(DAYS[i].title)}${S.logs[i].hours?` · ${S.logs[i].hours} h`:""}</button></li>`).join("")}</ul>`:`<p class="mute" style="margin:0">No notes yet. Pick a day and write what you studied.</p>`;
+}
+function openLog(i){renderLogForm(i);$("#logs").scrollIntoView()}
+
+/* ===== Events ===== */
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;
+ if(b.dataset.go)$(b.dataset.go).scrollIntoView();
+ else if(b.dataset.open!==undefined)openDay(+b.dataset.open);
+ else if(b.dataset.log!==undefined)openLog(+b.dataset.log);
+ else if(b.id==="navToday")openDay(focusIdx());
+ else if(b.id==="rst")$("#rc").hidden=false;
+ else if(b.id==="rn")$("#rc").hidden=true;
+ else if(b.id==="ry"){S.done={};S.logs={};save();$("#rc").hidden=true;renderLogForm(+$("#ld").value);render()}
+});
+document.addEventListener("change",e=>{
+ const c=e.target;
+ if(c.dataset.id){if(c.checked)S.done[c.dataset.id]=iso(new Date());else delete S.done[c.dataset.id];save();render()}
+ else if(c.id==="start"&&c.value){S.start=c.value;S.startSet=true;save();render()}
+ else if(c.id==="ld")renderLogForm(+c.value);
+});
+$("#lf").addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;const i=$("#ld").value;S.logs[i]=S.logs[i]||{};S.logs[i][k]=e.target.value;save();renderLogList()});
+
+/* ===== Init ===== */
+$("#ld").innerHTML=DAYS.map((d,i)=>`<option value="${i}">Day ${d.n} — ${d.title}</option>`).join("");
+renderCards();render();renderLogForm(focusIdx());
+</script>
+</body>
+</html>
